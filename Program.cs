@@ -24,11 +24,16 @@ namespace BlobConsole
             .AddJsonFile("appsettings.json", true, true)
             .Build();
 
-            //Get connection string
-            string getConnString = config["connectionstring"];
-            Console.WriteLine(getConnString);
+            //Connect to Azure service
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(config["connectionstring"]);
 
-            // CloudStorageAccount StorageAccount = CloudStorageAccount.Parse();
+            //Create new blob client
+            CloudBlobClient clientBlob = storageAccount.CreateCloudBlobClient();
+
+            //Select container, check and set permissions
+            CloudBlobContainer container = clientBlob.GetContainerReference("contenedorplatzi");
+            container.CreateIfNotExists();
+            container.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob});
         }
     }
 }

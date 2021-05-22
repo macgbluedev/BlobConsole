@@ -34,6 +34,18 @@ namespace BlobConsole
             CloudBlobContainer container = clientBlob.GetContainerReference("contenedorplatzi");
             container.CreateIfNotExists();
             container.SetPermissions(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob});
+
+            //Set filename in container
+            CloudBlockBlob myBlob = container.GetBlockBlobReference("azureLogo.jpg");
+
+            //Read file with IO method
+            using (var fileStream = System.IO.File.OpenRead(@"./images/AzureLogo.jpg"))
+            {
+                //Upload file to container
+                myBlob.UploadFromStream(fileStream);
+            }
+
+            Console.WriteLine("Upload File: OK");
         }
     }
 }
